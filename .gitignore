@@ -1,1 +1,4 @@
 node_modules
+dist
+public/videos/*.mp4
+public/videos/*.webm

@@ -1,0 +1,14 @@
+{
+  "name": "tick",
+  "version": "0.1.0",
+  "description": "Watch faces, animations, and alerts for a Raspberry Pi round touch display",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.1.0"
+  }
+}

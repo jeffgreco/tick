@@ -40,7 +40,11 @@ export class Engine {
     });
 
     this._renderDots();
-    this._goTo(0, false);
+
+    // Check URL hash for permalink to a specific face
+    const startIndex = this._indexFromHash();
+    this._goTo(startIndex, false);
+
     this._loop();
   }
 
@@ -64,6 +68,13 @@ export class Engine {
       });
     }
 
+    // Update URL hash for permalinking
+    const face = this.faces[this.currentIndex];
+    if (face) {
+      const slug = this._slugify(face.name);
+      history.replaceState(null, '', `#${slug}`);
+    }
+
     this._renderDots();
   }
 
@@ -85,6 +96,19 @@ export class Engine {
       if (i === this.currentIndex) dot.classList.add('active');
       this.dotsEl.appendChild(dot);
     });
+  }
+
+  // ── Hash permalink ──
+
+  _slugify(name) {
+    return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+
+  _indexFromHash() {
+    const hash = location.hash.replace(/^#/, '');
+    if (!hash) return 0;
+    const idx = this.faces.findIndex((f) => this._slugify(f.name) === hash);
+    return idx >= 0 ? idx : 0;
   }
 
   // ── Touch / pointer handling ──

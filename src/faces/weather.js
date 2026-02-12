@@ -30,6 +30,7 @@ let lastFetch = 0;
 let coords = null;
 let lastIconKey = '';
 let fetchFailed = false;
+let showTemps = false;
 
 const FETCH_MS = 30 * 60 * 1000;
 const RETRY_MS = 5 * 60 * 1000;
@@ -98,6 +99,22 @@ export default {
     svg.appendChild(disc(200, 200, 2.5, C.second));
 
     el.appendChild(svg);
+
+    // Tap to toggle between icons and temperatures
+    let tapX, tapY;
+    el.addEventListener('touchstart', (e) => {
+      tapX = e.touches[0].clientX;
+      tapY = e.touches[0].clientY;
+    }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - tapX;
+      const dy = e.changedTouches[0].clientY - tapY;
+      if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+        showTemps = !showTemps;
+        lastIconKey = '';
+      }
+    }, { passive: true });
+
     initLocation();
   },
 
@@ -118,7 +135,7 @@ export default {
     const iv = fetchFailed ? RETRY_MS : FETCH_MS;
     if (coords && Date.now() - lastFetch > iv) fetchWeather();
 
-    const key = `${now.getHours()}-${weatherData ? 'w' : 'n'}`;
+    const key = `${now.getHours()}-${weatherData ? 'w' : 'n'}-${showTemps}`;
     if (key !== lastIconKey) {
       lastIconKey = key;
       renderIcons(now);
@@ -151,7 +168,7 @@ async function fetchWeather() {
   if (!coords) return;
   lastFetch = Date.now();
   try {
-    const u = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&hourly=weather_code,is_day&timezone=auto&forecast_days=2`;
+    const u = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&hourly=weather_code,is_day,temperature_2m&temperature_unit=fahrenheit&timezone=auto&forecast_days=2`;
     const r = await fetch(u);
     const d = await r.json();
     weatherData = d.hourly;
@@ -203,16 +220,21 @@ function renderIcons(now) {
     // Hours ahead of current time for this dial position
     const stepsAhead = ((pos - (curHour % 12)) + 12) % 12;
 
-    let icon;
-    if (apiBase >= 0 && apiBase + stepsAhead < weatherData.weather_code.length) {
+    if (showTemps && apiBase >= 0 && apiBase + stepsAhead < weatherData.temperature_2m.length) {
       const idx = apiBase + stepsAhead;
-      icon = wmoToType(weatherData.weather_code[idx], weatherData.is_day[idx]);
+      const temp = Math.round(weatherData.temperature_2m[idx]);
+      drawTemp(g, `${temp}°`);
     } else {
-      const h24 = (curHour + stepsAhead) % 24;
-      icon = (h24 >= 6 && h24 < 20) ? 'sun' : 'moon';
+      let icon;
+      if (apiBase >= 0 && apiBase + stepsAhead < weatherData.weather_code.length) {
+        const idx = apiBase + stepsAhead;
+        icon = wmoToType(weatherData.weather_code[idx], weatherData.is_day[idx]);
+      } else {
+        const h24 = (curHour + stepsAhead) % 24;
+        icon = (h24 >= 6 && h24 < 20) ? 'sun' : 'moon';
+      }
+      drawIcon(g, icon, phase);
     }
-
-    drawIcon(g, icon, phase);
     el.appendChild(g);
   }
 }
@@ -243,6 +265,19 @@ function drawIcon(g, type, phase) {
     case 'snow':       return iconSnow(g, r);
     case 'thunder':    return iconThunder(g, r);
   }
+}
+
+function drawTemp(g, label) {
+  const t = document.createElementNS(SVG_NS, 'text');
+  t.setAttribute('x', 0);
+  t.setAttribute('y', 5);
+  t.setAttribute('text-anchor', 'middle');
+  t.setAttribute('fill', C.tick);
+  t.setAttribute('font-size', '14');
+  t.setAttribute('font-weight', '500');
+  t.setAttribute('font-family', 'SF Pro Display, -apple-system, Helvetica, sans-serif');
+  t.textContent = label;
+  g.appendChild(t);
 }
 
 // ── Icon Drawing ──

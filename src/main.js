@@ -9,12 +9,14 @@ import matrixRain from './faces/matrix-rain.js';
 import radarSweep from './faces/radar-sweep.js';
 import nixieTube from './faces/nixie-tube.js';
 import wordClock from './faces/word-clock.js';
+import literatureClock from './faces/literature-clock.js';
 import orrery from './faces/orrery.js';
 import tourbillon from './faces/tourbillon.js';
 import goesEarth from './faces/goes-earth.js';
 import girardPerregaux from './faces/girard-perregaux.js';
 import movadoChronograph from './faces/movado-chronograph.js';
 import weather from './faces/weather.js';
+import mad1 from './faces/mad1.js';
 
 // ── Boot ──
 
@@ -30,6 +32,7 @@ engine.register(matrixRain);
 engine.register(radarSweep);
 engine.register(nixieTube);
 engine.register(wordClock);
+engine.register(literatureClock);
 engine.register(orrery);
 engine.register(tourbillon);
 engine.register(goesEarth);
@@ -37,6 +40,7 @@ engine.register(girardPerregaux);
 engine.register(movadoChronograph);
 engine.register(weather);
 engine.register(porthole);
+engine.register(mad1);
 
 engine.start();
 

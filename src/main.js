@@ -13,6 +13,8 @@ import orrery from './faces/orrery.js';
 import tourbillon from './faces/tourbillon.js';
 import goesEarth from './faces/goes-earth.js';
 import girardPerregaux from './faces/girard-perregaux.js';
+import movadoChronograph from './faces/movado-chronograph.js';
+import weather from './faces/weather.js';
 
 // ── Boot ──
 
@@ -32,6 +34,8 @@ engine.register(orrery);
 engine.register(tourbillon);
 engine.register(goesEarth);
 engine.register(girardPerregaux);
+engine.register(movadoChronograph);
+engine.register(weather);
 engine.register(porthole);
 
 engine.start();

@@ -5,6 +5,14 @@ import minimalAnalog from './faces/minimal-analog.js';
 import pebbleDigital from './faces/pebble-digital.js';
 import snoopyMoon from './faces/snoopy-moon.js';
 import porthole from './faces/porthole.js';
+import matrixRain from './faces/matrix-rain.js';
+import radarSweep from './faces/radar-sweep.js';
+import nixieTube from './faces/nixie-tube.js';
+import wordClock from './faces/word-clock.js';
+import orrery from './faces/orrery.js';
+import tourbillon from './faces/tourbillon.js';
+import goesEarth from './faces/goes-earth.js';
+import girardPerregaux from './faces/girard-perregaux.js';
 
 // ── Boot ──
 
@@ -16,6 +24,14 @@ const engine = new Engine(
 engine.register(minimalAnalog);
 engine.register(snoopyMoon);
 engine.register(pebbleDigital);
+engine.register(matrixRain);
+engine.register(radarSweep);
+engine.register(nixieTube);
+engine.register(wordClock);
+engine.register(orrery);
+engine.register(tourbillon);
+engine.register(goesEarth);
+engine.register(girardPerregaux);
 engine.register(porthole);
 
 engine.start();
@@ -30,7 +46,3 @@ window.tick = {
   prevFace: () => engine.prev(),
 };
 
-// ── Demo alert on first load ──
-setTimeout(() => {
-  showAlert('swipe to change faces', { duration: 3000, color: '#aaa' });
-}, 1500);

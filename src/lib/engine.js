@@ -20,6 +20,7 @@ export class Engine {
     this.container = containerEl;
     this.dotsEl = dotsEl;
     this._bindTouch();
+    this._bindKeys();
   }
 
   /** Register a face module */
@@ -119,6 +120,15 @@ export class Engine {
     vp.addEventListener('touchend', onEnd, { passive: true });
     vp.addEventListener('mousedown', onStart);
     vp.addEventListener('mouseup', onEnd);
+  }
+
+  // ── Keyboard handling ──
+
+  _bindKeys() {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') this.next();
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') this.prev();
+    });
   }
 
   // ── Render loop ──

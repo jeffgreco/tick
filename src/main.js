@@ -17,6 +17,7 @@ import girardPerregaux from './faces/girard-perregaux.js';
 import movadoChronograph from './faces/movado-chronograph.js';
 import weather from './faces/weather.js';
 import mad1 from './faces/mad1.js';
+import pebbleRound from './faces/pebble-round.js';
 
 // ── Boot ──
 
@@ -40,6 +41,7 @@ engine.register(girardPerregaux);
 engine.register(movadoChronograph);
 engine.register(weather);
 engine.register(porthole);
+engine.register(pebbleRound);
 engine.register(mad1);
 
 engine.start();
